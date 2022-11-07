@@ -1,4 +1,5 @@
 import unittest
+from statistics import SortBy
 from statistics import Statistics
 from player import Player
  
@@ -39,12 +40,28 @@ class TestStatistics(unittest.TestCase):
 
         self.assertEqual(len(players), 0)
 
-    def test_find_top_scorers_success(self):
+    def test_find_top_scorers_success_by_points_with_one_parameter(self):
         players = self.statistics.top(1)
 
         self.assertEqual(len(players), 2)
+        self.assertEqual(str(players[0]), "Gretzky EDM 35 + 89 = 124")
+
+    def test_find_top_scorers_success_by_points_with_two_parameters(self):
+        players = self.statistics.top(1, SortBy.POINTS)
+
+        self.assertEqual(str(players[0]), "Gretzky EDM 35 + 89 = 124")
+
+    def test_find_top_scorers_success_by_goals(self):
+        players = self.statistics.top(1, SortBy.GOALS)
+
+        self.assertEqual(str(players[0]), "Lemieux PIT 45 + 54 = 99")
+
+    def test_find_top_scorers_success_by_assists(self):
+        players = self.statistics.top(1, SortBy.ASSISTS)
+       
+        self.assertEqual(str(players[0]), "Gretzky EDM 35 + 89 = 124")
 
     def test_find_top_scorers_fail(self):
         players = self.statistics.top(-1)
-
+        
         self.assertEqual(len(players), 0)
