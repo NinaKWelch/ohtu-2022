@@ -23,6 +23,8 @@ def main():
         
             players.append(player)
 
+    players.sort(key=lambda x: (x.goals + x.assists), reverse=True)
+
     print(f"Players from FIN {str(time)}")
 
     for player in players:
