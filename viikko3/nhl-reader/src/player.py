@@ -1,9 +1,10 @@
 class Player:
-    def __init__(self, name, team, goals, assists ):
+    def __init__(self, name, team, goals, assists, nationality):
         self.name = name
         self.team = team
         self.goals = goals
         self.assists = assists
+        self.nationality = nationality
         
     @property  
     def points(self):
