@@ -1,4 +1,5 @@
 import re
+# import sys, pdb
 from entities.user import User
 
 
@@ -8,6 +9,7 @@ class UserInputError(Exception):
 
 class AuthenticationError(Exception):
     pass
+
 
 def check_characters(user_entry):
     # https://stackoverflow.com/questions/3617797/regex-to-match-only-letters
@@ -20,6 +22,9 @@ class UserService:
         self._user_repository = user_repository
 
     def check_credentials(self, username, password):
+        # pysäytetään ohjelman suoritus tälle riville
+        # pdb.Pdb(stdout=sys.__stdout__).set_trace()
+
         if not username or not password:
             raise UserInputError("Username and password are required")
 
