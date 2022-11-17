@@ -33,6 +33,12 @@ Register With Nonmatching Password And Password Confirmation
     Submit Credentials
     Registration Should Fail With Message  Passwords not matching
 
+Login After Successful Registration
+# ...
+
+Login After Failed Registration
+# ...
+
 *** Keywords ***
 Registration Should Succeed
     Welcome Page Should Be Open
