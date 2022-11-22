@@ -8,10 +8,11 @@ from tuote import Tuote
 class TestKauppa(unittest.TestCase):
     def setUp(self):
         self.pankki_mock = Mock()
-        self.viitegeneraattori_mock = Mock()
+        # laitetaan Mock-olio toteuttamaan Viitegeneraattori-luokan metodit
+        self.viitegeneraattori_mock = Mock(wraps=Viitegeneraattori())
 
         # palautetaan aina arvo 42
-        self.viitegeneraattori_mock.uusi.return_value = 42
+        # self.viitegeneraattori_mock.uusi.return_value = 42
 
         self.varasto_mock = Mock()
 
@@ -88,3 +89,56 @@ class TestKauppa(unittest.TestCase):
 
         # varmistetaan, että metodia tilisiirto on kutsuttu oikealla asiakkaalla, tilinumeroilla ja summalla
         self.pankki_mock.tilisiirto.assert_called_with("pekka", ANY, "12345", ANY, 5)
+
+    def test_uuden_asioinnin_aloittaminen_nollaa_edellisen_ostoksen_tiedot(self):
+        # tehdään ensimmaiset ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # varmistetaan, että metodia tilisiirto on kutsuttu oikealla summalla
+        self.pankki_mock.tilisiirto.assert_called_with(ANY, ANY, ANY, ANY, 5)
+
+        # tehdään toiset ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # varmistetaan, että edellisen ostoksen hinta ei näy uuden ostoksen hinnassa
+        self.pankki_mock.tilisiirto.assert_called_with(ANY, ANY, ANY, ANY, 3)
+
+    def test_pyydetaan_uusi_viite_jokaiselle_maksutapahtumalle(self):
+        # tehdään ensimmaiset ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # tarkistetaan että tässä vaiheessa viitegeneraattorin metodia uusi on kutsuttu kerran
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 1)
+
+        # tehdään toiset ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # tarkistetaan että tässä vaiheessa viitegeneraattorin metodia uusi on kutsuttu kaksi kertaa
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 2)
+
+        # tehdään kolmannet ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(3)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # tarkistetaan että tässä vaiheessa viitegeneraattorin metodia uusi on kutsuttu kolme kertaa
+        self.assertEqual(self.viitegeneraattori_mock.uusi.call_count, 3)
+    
+    def test_tuotteen_poisto_korista_tapahtuu_onnistuneesti(self):
+        # tehdään ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.poista_korista(2)
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # varmistetaan, että poistettua tuotetta ei lisätä ostoksiin
+        self.pankki_mock.tilisiirto.assert_called_with(ANY, ANY, ANY, ANY, 5)
