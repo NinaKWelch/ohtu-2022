@@ -11,15 +11,14 @@ class Ostoskori:
         # eli jos koriin lisätty 2 kpl tuotetta "maito", tulee metodin palauttaa 2 
         # samoin jos korissa on 1 kpl tuotetta "maito" ja 1 kpl tuotetta "juusto", tulee metodin palauttaa 2
         tavaramaara = map(lambda o: o.lukumaara(), self._ostokset)
-
-        if len(self._ostokset) == 0:
-            return 0
         
         return sum(tavaramaara)
  
     def hinta(self):
-        return 0
         # kertoo korissa olevien ostosten yhteenlasketun hinnan
+        hinnat = map(lambda o: o.hinta(), self._ostokset)
+
+        return sum(hinnat)
 
     def lisaa_tuote(self, lisattava: Tuote):
         # lisää tuotteen

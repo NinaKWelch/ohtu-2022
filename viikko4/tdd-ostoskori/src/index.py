@@ -8,7 +8,7 @@ def main():
 
     my_basket.lisaa_tuote(my_product)
     print(my_basket.tavaroita_korissa())
-   
+    print(my_basket.hinta())
 
 if __name__ == "__main__":
     main()
