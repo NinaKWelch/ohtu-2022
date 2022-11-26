@@ -9,7 +9,8 @@ def main():
     my_basket.lisaa_tuote(my_product_1)
     print(my_basket.tavaroita_korissa())
     print(my_basket.hinta())
-    print(my_basket.ostokset())
+    print(my_basket.ostokset()[0].tuotteen_nimi())
+    print(my_basket.ostokset()[0].lukumaara())
 
 if __name__ == "__main__":
     main()
