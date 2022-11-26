@@ -7,10 +7,10 @@ def main():
     my_product_1 = Tuote("Maito", 3)
     my_product_2 = Tuote("Leipä", 5)
     my_basket.lisaa_tuote(my_product_1)
+    my_basket.lisaa_tuote(my_product_2)
     print(my_basket.tavaroita_korissa())
     print(my_basket.hinta())
-    print(my_basket.ostokset()[0].tuotteen_nimi())
-    print(my_basket.ostokset()[0].lukumaara())
+    print(len(my_basket.ostokset()))
 
 if __name__ == "__main__":
     main()
