@@ -41,11 +41,11 @@ class Ostoskori:
                     self._ostokset = filter(ostos, self._ostokset)
                     return
                 
-                self._ostokset = []
+                self.tyhjenna()
 
     def tyhjenna(self):
-        pass
         # tyhjentää ostoskorin
+        self._ostokset = []
     
     def ostokset(self):
         # palauttaa listan jossa on korissa olevat ostos-oliot
