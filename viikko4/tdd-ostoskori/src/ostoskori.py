@@ -38,7 +38,8 @@ class Ostoskori:
                     return
 
                 if ostos.lukumaara() == 1 and len(self._ostokset) > 1:
-                    self._ostokset = filter(ostos, self._ostokset)
+                    muokattu_lista = filter(lambda o: o.tuote != poistettava, self._ostokset)
+                    self._ostokset = list(muokattu_lista)
                     return
                 
                 self.tyhjenna()
