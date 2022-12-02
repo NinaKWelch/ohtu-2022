@@ -1,26 +1,23 @@
 import unittest
 from tennis_game import TennisGame
 from player import Player
-
+from score import Score
 
 class TestTennisGame(unittest.TestCase):
     def setUp(self):
-        self.game = TennisGame()
+        self.playerA = Player("PlayerA")
+        self.playerB = Player("PlayerA")
+        self.score = Score()
+        self.game = TennisGame(self.playerA, self.playerB, self.score)
+        
+    def test_game_has_an_initial_score(self):
+        self.assertEqual(self.game.get_score(), "Love - All")
 
-    def test_initial_game_has_no_players(self):
-        players = self.game.get_players()
-        self.assertEqual(len(players), 0)
-
-    def test_players_can_be_added_with_correct_name_and_score(self):
-        playerA = Player("A")
-        playerB = Player("B")
-
-        self.game.assign_players(playerA, playerB)
-
+    def test_game_has_two_players_with_name_and_points(self):
         players = self.game.get_players()
 
         self.assertEqual(len(players), 2)
-        self.assertEqual(players[0].player_name(), "A")
+        self.assertEqual(players[0].name(), "PlayerA")
         self.assertEqual(players[0].points(), 0)
 
 
