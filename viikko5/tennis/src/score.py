@@ -20,7 +20,7 @@ class Score:
                     self._score = "Forty - All"
                 case 4:
                     self._score = "Deuce"
-        elif playerA.points() >= 4 or playerB.points() >=4:
+        elif playerA.points() >= 4 or playerB.points() >= 4:
             point_difference = playerA.points() - playerB.points() 
 
             if point_difference == 1:
