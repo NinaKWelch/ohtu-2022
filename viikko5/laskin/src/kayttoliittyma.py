@@ -13,13 +13,15 @@ class Kayttoliittyma:
     def __init__(self, sovellus, root):
         self._sovellus = sovellus
         self._root = root
-
+        
         self._komennot = {
             Komento.SUMMA: Summa(self._sovellus),
             Komento.EROTUS: Erotus(self._sovellus),
             Komento.NOLLAUS: Nollaus(self._sovellus),
             Komento.KUMOA: Kumoa(self._sovellus)
         }
+
+        self._kumottava_komento = self._komennot[Komento.NOLLAUS]
 
     def kaynnista(self):
         self._tulos_var = StringVar()
@@ -63,15 +65,27 @@ class Kayttoliittyma:
 
 
     def _suorita_komento(self, komento):
+        edellinen_arvo = 0
         syote = 0
 
         try:
             syote = int(self._syote_kentta.get())
         except Exception:
             pass
+        
+        try:
+            edellinen_arvo = int(self._tulos_var.get())
+        except Exception:
+            pass
 
         komento_olio = self._komennot[komento]
-        komento_olio.suorita(syote)
+    
+        if komento_olio != self._komennot[Komento.KUMOA]:
+            komento_olio.suorita(syote, edellinen_arvo)
+            self._kumottava_komento = komento_olio
+        else:
+            self._kumottava_komento.kumoa()
+
         self._kumoa_painike["state"] = constants.NORMAL
 
         if self._sovellus.tulos == 0:
