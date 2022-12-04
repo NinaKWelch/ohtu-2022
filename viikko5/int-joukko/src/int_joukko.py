@@ -10,9 +10,6 @@ class IntJoukko:
         self.alkioidenLkm = 0
       
     def kuuluu(self, luku):
-        if not isinstance(luku, int):
-            raise ValueError("Lisattavan arvon on oltava kokonaisluku") 
-
         return True if luku in self.taulukko else False
 
     def lisaa(self, luku):
@@ -31,8 +28,8 @@ class IntJoukko:
             raise ValueError("Lisattavan arvon on oltava kokonaisluku") 
 
         if self.kuuluu(luku):
-            muutettu_taulukko = filter(lambda x: (x != luku), self.taulukko)
-            self.taulukko = list(muutettu_taulukko)
+            self.taulukko = list(filter(lambda x: (x != luku), self.taulukko))
+            self.taulukko.extend([0] * 1)
             self.alkioidenLkm -= 1
 
     def kasvata_taulukkoa(self):
@@ -45,50 +42,41 @@ class IntJoukko:
         return self.alkioidenLkm
 
     def to_int_list(self):
-        alkio_taulukko = filter(lambda x: (x != 0), self.taulukko)
-        self.taulukko = list(alkio_taulukko)
-        return self.taulukko
+        alkio_taulukko = list(filter(lambda x: (x != 0), self.taulukko))
+        alkio_taulukko.sort()
+        return alkio_taulukko
 
     @staticmethod
-    def yhdiste(a, b):
-        x = IntJoukko()
-        a_taulu = a.to_int_list()
-        b_taulu = b.to_int_list()
+    def yhdiste(joukko_a, joukko_b):
+        yhdiste_joukko = IntJoukko()
 
-        for i in range(0, len(a_taulu)):
-            x.lisaa(a_taulu[i])
+        for luku in joukko_a.to_int_list():
+            yhdiste_joukko.lisaa(luku)
 
-        for i in range(0, len(b_taulu)):
-            x.lisaa(b_taulu[i])
+        for luku in joukko_b.to_int_list():
+            yhdiste_joukko.lisaa(luku)
 
-        return x
+        return yhdiste_joukko
 
     @staticmethod
-    def leikkaus(a, b):
-        y = IntJoukko()
-        a_taulu = a.to_int_list()
-        b_taulu = b.to_int_list()
+    def leikkaus(joukko_a, joukko_b):
+        leikkaus_joukko = IntJoukko()
 
-        for i in range(0, len(a_taulu)):
-            for j in range(0, len(b_taulu)):
-                if a_taulu[i] == b_taulu[j]:
-                    y.lisaa(b_taulu[j])
-
-        return y
+        for luku in joukko_a.to_int_list():
+            if luku in joukko_b.to_int_list():
+                leikkaus_joukko.lisaa(luku)
+       
+        return leikkaus_joukko
 
     @staticmethod
-    def erotus(a, b):
-        z = IntJoukko()
-        a_taulu = a.to_int_list()
-        b_taulu = b.to_int_list()
+    def erotus(joukko_a, joukko_b):
+        erotus_joukko = IntJoukko()
 
-        for i in range(0, len(a_taulu)):
-            z.lisaa(a_taulu[i])
-
-        for i in range(0, len(b_taulu)):
-            z.poista(b_taulu[i])
-
-        return z
+        for luku in joukko_a.to_int_list():
+            if not luku in joukko_b.to_int_list():
+                erotus_joukko.lisaa(luku)
+        
+        return erotus_joukko
 
     def __str__(self):
         if self.alkioidenLkm == 0:
@@ -96,10 +84,5 @@ class IntJoukko:
         elif self.alkioidenLkm == 1:
             return "{" + str(self.taulukko[0]) + "}"
         else:
-            tuotos = "{"
-            for i in range(0, self.alkioidenLkm - 1):
-                tuotos = tuotos + str(self.taulukko[i])
-                tuotos = tuotos + ", "
-            tuotos = tuotos + str(self.taulukko[self.alkioidenLkm - 1])
-            tuotos = tuotos + "}"
-            return tuotos
+            string = ", ".join(str(x) for x in self.to_int_list())
+            return "{" + string + "}"
