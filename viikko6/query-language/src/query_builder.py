@@ -5,6 +5,9 @@ class QueryBuilder:
     def __init__(self, query=All()):
         self.query = query
 
+    def oneOf(self, optionA, optionB):
+        return QueryBuilder(Or(And(self.query, optionA), And(self.query, optionB)))
+
     def playsIn(self, team):
         return QueryBuilder(And(self.query, PlaysIn(team)))
 
@@ -15,6 +18,5 @@ class QueryBuilder:
         return QueryBuilder(And(self.query, HasFewerThan(value, attr)))
 
     def build(self):
-        print(self.query)
         return self.query
         
